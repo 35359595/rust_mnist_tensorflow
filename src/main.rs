@@ -22,16 +22,15 @@ mod mnist;
 use mnist::import_data;
 
 fn main() {
-    // Putting the main code in another function serves two purposes:
-    // 1. We can use the `?` operator.
-    // 2. We can call exit safely, which does not run any destructors.
     let mut images = import_data("train-images-idx3-ubyte.gz");
+    let mut images_test = import_data("t10k-images-idx3-ubyte.gz");
     let mut labels = import_data("train-labels-idx1-ubyte.gz");
+    let mut labels_test = import_data("t10k-labels-idx1-ubyte.gz"); 
 
     //image converter tensor by tensor
     let mut buffer = Vec::new();
     let mut letter_container = Vec::new();
-    while let Some(symbol) = images.pop() {
+    while let Some(symbol) = images_test.pop() {
         if buffer.len() < 784 {
             buffer.push(symbol);
         } else {
@@ -42,18 +41,23 @@ fn main() {
 
     //labels pop garbage off
     for i in 0..8 {
-        println!("Disposing {}", labels.remove(i));
+        println!("Disposing from train labels {}", labels.remove(i));
+        println!("Disposing from test labels {}", labels_test.remove(i));
     }    
 
     println!("Collected {} numbers!", letter_container.len());
     println!("size of a number: {}", letter_container[0].len());
 //    println!("content of first number: {:?}", letter_container[0]);
-//    println!("Content of second number: {:?}", letter_container[1]);
-    for i in 0..100 {
-        println!("{} label: {}", i, labels[i]);
-    }
-    println!("Labels count: {}", labels.len());
-//    for n in 0..28{}
+   println!("Content of last number size: {}", letter_container[letter_container.len() - 1].len());
+    // for i in 0..100 {
+    //     println!("{} label: {}", i, labels[i]);
+    // }
+    // println!("Labels count: {}", labels.len());
+
+    // for i in 0..10 {
+    //     println!("test label {} : {}", i, labels_test[i]);
+    // }
+    // println!("test labels count: {}", labels_test.len());
 
     // exit(match run() {
     //     Ok(_) => 0,
