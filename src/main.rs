@@ -27,37 +27,16 @@ fn main() {
     let mut labels = import_data("train-labels-idx1-ubyte.gz");
     let mut labels_test = import_data("t10k-labels-idx1-ubyte.gz"); 
 
-    //image converter tensor by tensor
-    let mut buffer = Vec::new();
-    let mut letter_container = Vec::new();
-    while let Some(symbol) = images_test.pop() {
-        if buffer.len() < 784 {
-            buffer.push(symbol);
-        } else {
-            letter_container.push(buffer);
-            buffer = Vec::new();
-        }
-    }
-
     //labels pop garbage off
     for i in 0..8 {
         println!("Disposing from train labels {}", labels.remove(i));
         println!("Disposing from test labels {}", labels_test.remove(i));
     }    
 
-    println!("Collected {} numbers!", letter_container.len());
-    println!("size of a number: {}", letter_container[0].len());
-//    println!("content of first number: {:?}", letter_container[0]);
-   println!("Content of last number size: {}", letter_container[letter_container.len() - 1].len());
-    // for i in 0..100 {
-    //     println!("{} label: {}", i, labels[i]);
-    // }
-    // println!("Labels count: {}", labels.len());
-
-    // for i in 0..10 {
-    //     println!("test label {} : {}", i, labels_test[i]);
-    // }
-    // println!("test labels count: {}", labels_test.len());
+    println!("Collected {} numbers!", images.len() / 784); // [60000]
+    println!("Collected {} test numbers", images_test.len() / 784); // [10000]
+    println!("Labels count: {} and last one is {}", labels.len(), labels[labels.len() - 1]); //[60000 / 8]
+    println!("test labels count: {} and last one os {}", labels_test.len(), labels_test[labels_test.len() - 1]); // [10000 / 6]
 
     // exit(match run() {
     //     Ok(_) => 0,
